@@ -74,7 +74,6 @@ async function onPressLoadMore() {
     onToggleBtn(totalHits);
 
     galleryList.refresh();
-
     
 }
 

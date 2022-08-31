@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 const BASE_URL = 'https://pixabay.com/api/';
-const API_KEY = '29584253-cd90e7f8e2a20a00eedab1d09';
+// const API_KEY = '29584253-cd90e7f8e2a20a00eedab1d09';
 
 
 const parameters = {
-    key: API_KEY,
+    key: '29584253-cd90e7f8e2a20a00eedab1d09',
     image_type: 'photo',
     orientation: 'horizontal',
     safesearch: true,
@@ -20,7 +20,7 @@ export default class AxiosRequestService{
 
     async onGetImage(){
     try {
-        const url = `${BASE_URL}?q=${this.searchQuery}&pagw=${this.page}`;
+        const url = `${BASE_URL}?q=${this.searchQuery}&page=${this.page}`;
         const response = await axios.get(url, { parameters });
         await this.incrementPage();
         return response.data;
@@ -53,7 +53,6 @@ export default class AxiosRequestService{
   set query(newQuery) {
     this.searchQuery = newQuery;
   }
-    
     
 }
 
