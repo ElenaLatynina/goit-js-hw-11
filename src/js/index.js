@@ -41,4 +41,48 @@ async function onSearchImg(event) {
 
     totalHits = images.totalHits;
     Notiflix.Notify.success(`Hooray! We found ${totalHits}totalHits images.`)
+    totalHits -= images.hits.length;
+    const markup = createMarkup(images.hits);
+
+    onCreateGallery(markup);
+
+    onPressLoadMore(totalHits);
+
+
+}
+
+function clearMarkup() {
+    galleryList.innerHTML = '';
+}
+
+function onCreateGallery(markup) {
+     galleryList.insertAdjacentHTML('beforeend', markup)
+    
+}
+
+async function onPressLoadMore() { 
+    const images = await searchImg.onGetImage();
+    const markup = onCreateGallery(images.hits);
+    totalHits -= images.hits.length;
+    onCreateGallery(markup);
+
+    if (totalHits === 0 || totalHits < 0) {
+        Notiflix.Notify.info(`We're sorry, but you've reached the end of search results.`);
+        return;
+    }
+
+    onToggleBtn(totalHits);
+
+    galleryList.refresh();
+
+    
+}
+
+function onToggleBtn(hitsValue) {
+    if (hitsValue === 0 || hitsValue < 0) {
+        loadMoreBTN.style.display = 'none';
+    }
+    else {
+        loadMoreBTN.style.display = 'block';
+    }
 }
