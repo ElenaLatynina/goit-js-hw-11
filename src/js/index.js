@@ -16,7 +16,7 @@ const gallery = new SimpleLightbox('.gallery a', {
 });
  
 searchForm.addEventListener('submt', onSearchImg);
-loadMoreBTN.addEventListener('click', onLoadMore);
+loadMoreBTN.addEventListener('click', onPressLoadMore);
 
 let totalHits = 0;
 
@@ -35,28 +35,28 @@ async function onSearchImg(event) {
     const images = await searchImg.onGetImage();
 
     if (images.hits.length === 0) {
-        Notiflix.Notify.failure{ `Sorry, there are no images matching your search query. Please try again.` };
+        Notiflix.Notify.failure(`Sorry, there are no images matching your search query. Please try again.`);
         return;
     }
 
     totalHits = images.totalHits;
-    Notiflix.Notify.success(`Hooray! We found ${totalHits}totalHits images.`)
+    Notiflix.Notify.success(`Hooray! We found ${totalHits}totalHits images.`);
+
     totalHits -= images.hits.length;
     const markup = createMarkup(images.hits);
 
     onCreateGallery(markup);
+    onToggleBtn(totalHits);
+    galleryList.refresh();
 
-    onPressLoadMore(totalHits);
-
-
-}
-
+    }
+        
 function clearMarkup() {
     galleryList.innerHTML = '';
 }
 
 function onCreateGallery(markup) {
-     galleryList.insertAdjacentHTML('beforeend', markup)
+    galleryList.insertAdjacentHTML('beforeend', markup)
     
 }
 
