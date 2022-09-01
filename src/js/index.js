@@ -1,87 +1,83 @@
-import AxiosRequestService from './axiosRequest';
-import Notiflix from "notiflix";
-import Simplelightbox from 'simplelightbox'
+import { Notify } from 'notiflix';
+import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+
+import AxiosRequestService from './axiosRequest';
 import createMarkup from './createMarkup';
 
-const searchForm = document.querySelector('#search-form');
-const galleryList = document.querySelector('.gallery');
-const loadMoreBTN = document.querySelector('.load-more');
-
-const searchImg = new AxiosRequestService();
-let gallery= new SimpleLightbox('.gallery a', { 
-    scrollZoom: false,
-    captionsData: 'alt',
-    captionDelay: 250,
+const findImages = new AxiosRequestService();
+const gallery = new SimpleLightbox('.gallery a', {
+  scrollZoom: false,
+  captionsData: 'alt',
+  captionDelay: 250,
 });
- 
-searchForm.addEventListener('submt', onSearchImg);
-loadMoreBTN.addEventListener('click', onPressLoadMore);
+
+const refs = {
+  searchForm: document.querySelector('#search-form'),
+  gallery: document.querySelector('.gallery'),
+  loadMoreBtn: document.querySelector('.load-more'),
+};
+
+refs.loadMoreBtn.style.display = 'none';
+
+refs.searchForm.addEventListener('submit', onSearch);
+refs.loadMoreBtn.addEventListener('click', onLoadMore);
 
 let totalHits = 0;
+refs.loadMoreBtn.style.display = 'none';
 
-async function onSearchImg(event) {
-    event.preventDefault();
-    clearMarkup();
-    const searchValue = event.currentTarget.elements.searchQuery.value.trim();
+async function onSearch(event) {
+  event.preventDefault();
+  clearMarkup();
+  const searchValue = event.currentTarget.elements.searchQuery.value.trim();
+  if (!searchValue) {
+    return;
+  }
 
-    if (!searchValue) {
-        return
-    }
+  findImages.query = searchValue;
+  findImages.resetPage();
+  const images = await findImages.getImage();
+  if (images.hits.length === 0) {
+    Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+    return;
+  }
 
-    searchImg.query = searchValue;
-    searchImg.resetPage();
+  totalHits = images.totalHits;
+  Notify.success(`Hooray! We found ${totalHits} images.`);
+  totalHits -= images.hits.length;
+  const markup = createMarkup(images.hits);
+  addToMarkup(markup);
+  toggleLoadMoreBtn(totalHits);
+  gallery.refresh();
+}
 
-    const images = await searchImg.onGetImage();
+async function onLoadMore() {
+  const images = await rfindImages.getImage();
+  const markup = createMarkup(images.hits);
+  totalHits -= images.hits.length;
+  addToHTML(markup);
 
-    if (images.hits.length === 0) {
-        Notiflix.Notify.failure(`Sorry, there are no images matching your search query. Please try again.`);
-        return;
-    }
+  if (totalHits === 0 || totalHits < 0) {
+    Notify.info("We're sorry, but you've reached the end of search results.");
+    return;
+  }
 
-    totalHits = images.totalHits;
-    Notiflix.Notify.success(`Hooray! We found ${totalHits}totalHits images.`);
+  toggleLoadMoreBtn(totalHits);
+  gallery.refresh();
+}
 
-    totalHits -= images.hits.length;
-    const markup = createMarkup(images.hits);
+function addToMarkup(markup) {
+  refs.gallery.insertAdjacentHTML('beforeend', markup);
+}
 
-    onCreateGallery(markup);
-    onToggleBtn(totalHits);
-    gallery.refresh();
-
-    }
-        
 function clearMarkup() {
-    galleryList.innerHTML = '';
+  refs.gallery.innerHTML = '';
 }
 
-function onCreateGallery(markup) {
-    galleryList.insertAdjacentHTML('beforeend', markup)
-    
-}
-
-async function onPressLoadMore() { 
-    const images = await searchImg.onGetImage();
-    const markup = onCreateGallery(images.hits);
-    totalHits -= images.hits.length;
-    onCreateGallery(markup);
-
-    if (totalHits === 0 || totalHits < 0) {
-        Notiflix.Notify.info(`We're sorry, but you've reached the end of search results.`);
-        return;
-    }
-
-    onToggleBtn(totalHits);
-
-    gallery.refresh();
-    
-}
-
-function onToggleBtn(hitsValue) {
-    if (hitsValue === 0 || hitsValue < 0) {
-        loadMoreBTN.style.display = 'none';
-    }
-    else {
-        loadMoreBTN.style.display = 'block';
-    }
+function toggleLoadMoreBtn(hitsValue) {
+  if (hitsValue === 0 || hitsValue < 0) {
+    refs.loadMoreBtn.style.display = 'none';
+  } else {
+    refs.loadMoreBtn.style.display = 'block';
+  }
 }
