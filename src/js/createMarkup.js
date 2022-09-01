@@ -3,7 +3,7 @@ export default function createMarkup(images) {
         return `
         <div class="photo-card">
         <a class="photo-card_link" href="${image.largeImageURL}">
-         <img src="${image.webformatURL}" alt="${image.tags}" loading="lazy" /> 
+         <img class="photo-card__image" src="${image.webformatURL}" alt="${image.tags}" loading="lazy" /> 
         </a>
             <div class="info">
                 <p class="info-item">

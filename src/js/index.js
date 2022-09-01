@@ -5,11 +5,11 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 import createMarkup from './createMarkup';
 
 const searchForm = document.querySelector('#search-form');
-const galleryList = document.querySelector('.gallery');
+let galleryList = document.querySelector('.gallery');
 const loadMoreBTN = document.querySelector('.load-more');
 
 const searchImg = new AxiosRequestService();
-const gallery = new SimpleLightbox('.gallery a', { 
+galleryList= new SimpleLightbox('.gallery a', { 
     scrollZoom: false,
     captionsData: 'alt',
     captionDelay: 250,
