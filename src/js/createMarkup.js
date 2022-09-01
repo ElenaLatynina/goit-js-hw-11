@@ -7,7 +7,7 @@ export default function createMarkup(images) {
         </a>
             <div class="info">
                 <p class="info-item">
-                <b>Likes ${images.Likes}</b>
+                <b>Likes ${images.likes}</b>
                 </p>
                 <p class="info-item">
                 <b>Views ${images.views}</b>

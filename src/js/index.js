@@ -5,11 +5,11 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 import createMarkup from './createMarkup';
 
 const searchForm = document.querySelector('#search-form');
-let galleryList = document.querySelector('.gallery');
+const galleryList = document.querySelector('.gallery');
 const loadMoreBTN = document.querySelector('.load-more');
 
 const searchImg = new AxiosRequestService();
-galleryList= new SimpleLightbox('.gallery a', { 
+let gallery= new SimpleLightbox('.gallery a', { 
     scrollZoom: false,
     captionsData: 'alt',
     captionDelay: 250,
@@ -47,7 +47,7 @@ async function onSearchImg(event) {
 
     onCreateGallery(markup);
     onToggleBtn(totalHits);
-    galleryList.refresh();
+    gallery.refresh();
 
     }
         
@@ -73,7 +73,7 @@ async function onPressLoadMore() {
 
     onToggleBtn(totalHits);
 
-    galleryList.refresh();
+    gallery.refresh();
     
 }
 
