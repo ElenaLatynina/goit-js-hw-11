@@ -17,9 +17,7 @@ export default class AxiosRequestService {
   async getImage() {
     try {
       const url = `https://pixabay.com/api/?q=${this.searchQuery}&page=${this.page}`;
-
       const response = await axios.get(url, { params });
-
       await this.incrementPage();
       return response.data;
     } catch (error) {
