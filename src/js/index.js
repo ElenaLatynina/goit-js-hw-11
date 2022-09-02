@@ -52,10 +52,10 @@ async function onSearch(event) {
 }
 
 async function onLoadMore() {
-  const images = await rfindImages.getImage();
+  const images = await findImages.getImage();
   const markup = createMarkup(images.hits);
   totalHits -= images.hits.length;
-  addToHTML(markup);
+  addToMarkup(markup);
 
   if (totalHits === 0 || totalHits < 0) {
     Notify.info("We're sorry, but you've reached the end of search results.");
