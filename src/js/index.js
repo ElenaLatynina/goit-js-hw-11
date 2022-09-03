@@ -57,6 +57,7 @@ async function onLoadMore() {
 
   if (totalHits === 0 || totalHits < 0) {
     Notify.info("We're sorry, but you've reached the end of search results.");
+    refs.loadMoreBtn.style.display = 'none';
     return;
   }
 
